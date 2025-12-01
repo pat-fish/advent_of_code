@@ -2,13 +2,14 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <cmath>
 
 using namespace std;
 
 vector<string> input;
 
 int read_input() {
-    ifstream inputFile("./pr1p1.txt");
+    ifstream inputFile("../part1/pr1p1.txt");
 
     if (!inputFile.is_open()) {
         cerr << "Error opening file" << endl;
@@ -30,15 +31,25 @@ int get_zeros() {
         string curr = input[i];
         string dir = curr.substr(0,1);
         string len = curr.substr(1);
-
+        int prev = sum;
+        
         if (dir == "L") {
             sum -= stoi(len);
+            for (int i = sum; i < prev; i++) {
+                // count turns that land on 0
+                if (i % 100 == 0) {
+                    count++;
+                }
+            }
+
         } else {
             sum += stoi(len);
-        }
-
-        if (sum % 100 == 0) {
-            count++;
+            for (int i = sum; i > prev; i--) {
+                // count turns that land on 0
+                if (i % 100 == 0) {
+                    count++;
+                }
+            }
         }
     }
 
@@ -46,13 +57,6 @@ int get_zeros() {
 }
 
 int main() {
-
-    /*
-    read input and find first char (if L go left, if R go right)
-    add to total sum using specified weight, if sum % 90 == 0, add to count
-    count starts @ 50
-    return count
-    */
     read_input();
     int count = get_zeros();
 
